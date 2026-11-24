@@ -7,6 +7,10 @@ PCC-initiated colored SR policy
     Admin Status    : Up                    Color           : 101
     Preference      : 100                   BSID            : 24501
     Operational     : Yes
+    Pce Report      : Disabled
+    PathCompMethod  : pce                   OprPathCompMeth : pce
+    PCE Upd ID      : 6                     PCE Updt State  : Computed
+    PCEUpdFailCode  : noError
     1 MPLS Label  : 16001                 State           : resolved-up
   xr-color-101-final:
     Color: 101, Endpoint: 192.0.2.1

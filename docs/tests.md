@@ -10,7 +10,7 @@ The virtual runs use 7250 IXR-e3x SR-SIM with SR OS 26.10.R1 and Cisco IOS XRd 2
 | PHP and explicit-null | In L3VPN v4/v6, a capture toward Cisco showed the service label alone with PHP and `0 + service label` with explicit-null. An IPv4 injection test also verified IXR as egress. Nokia documents its own advertised IS-IS Prefix-SIDs with `P=1, E=0`. Nonzero TC propagation through every imposed label remains unverified. |
 | TI-LFA link, node and SRLG | Node-protect TI-LFA was programmed for the remote Prefix-SID. Cutting the primary core link moved traffic to the alternate. A separate run isolated all three P1 data links in one commit. The tunnel moved to P2 and 60 out of 60 probes succeeded at 200 ms intervals. A shared SRLG suppressed the repair, which returned after removing the shared-risk tag from the alternate. |
 | BGP PIC for BGP-LU | Two labeled paths used distinct next hops. IXR had the backup before withdrawal and used it after the primary peering was disabled. Probes succeeded before and after. The test did not measure switching time. |
-| PCEP and colored SR policy | A PCC-initiated color-101 candidate path was delegated and installed after Cisco computed it. Cisco originated an ordinary PCE-initiated SR-TE LSP. The PCE-initiated attempt did not install a colored SR policy. |
+| PCEP and colored SR policy | In the lab, the locally configured color-101 policy was active with `PathCompMethod: pce` and `PCE Updt State: Computed`. The evidence for color 101 establishes computation in this run. Support for dynamic colored candidate paths requires Nokia confirmation because the SR OS guide lists this mode as unsupported. Cisco originated an ordinary PCE-initiated SR-TE LSP. Colored PCE initiation and control remain unsupported per the guide. |
 | BGP-LS and Flex-Algo | Cisco received eight topology NLRIs on the baseline. On the services topology, Flex-Algo 128 excluded the primary affinity and resolved through p2 with SID 16104. |
 | Automated steering by color and ODN | Color 101 resolved to an installed SR policy in the FIB. Color 102 triggered an on-demand SR-TE LSP and used it. Withdrawal removed the route and tunnel. Re-advertisement recreated them. |
 | EVPN-VPWS and FAT | Both endpoints brought up EVPN-MPLS VPWS. Captures showed Nokia imposing the FAT label and the labeled Ethernet frame reaching Cisco. Host-to-host forwarding did not pass on the tested XRd image. |
@@ -57,7 +57,16 @@ Apply `configs/pe2-underlay.cli` after deploying [the services topology](../diam
 
 Deploy [the baseline topology](../baseline.clab.yml) and apply [the IOS XR configuration](../configs/pce.cli). On PCC use `show router pcep pcc peer` and `show router segment-routing sr-policies all`. On PCE use `show pce lsp detail`.
 
-- Confirm locally configured `PCC-COLOR-101` is active and Cisco reports color 101. Compare the separate Cisco `PCInitiate` case with `show router mpls sr-te-lsp auto-lsp all detail` on PCC. The original run showed an ordinary `pceInitP2PSrTe` for the PCE-initiated request. The capture did not establish which association objects Cisco sent in that request. Nokia SR OS documentation lists PCE initiation and control of colored candidate paths as unsupported. [Nokia PCEP Guide](https://documentation.nokia.com/sr/26-10/7x50-shared/segment-routing-pce-user/pcep.html)
+The 7250 IXR 26.10.R1 standards list includes all four RFCs below. Each observation covers the specific interop case in the two-node lab. [Nokia 7250 IXR documentation](https://documentation.nokia.com/ixr/)
+
+| Reference | Interop evidence |
+| --- | --- |
+| [RFC 8231](https://www.rfc-editor.org/info/rfc8231/) | Stateful PCEP session Up with database synchronization done. Delegation for a colored candidate path remains unverified. |
+| [RFC 8281](https://www.rfc-editor.org/info/rfc8281/) | Cisco initiation installed an ordinary `pceInitP2PSrTe` auto-LSP. |
+| [RFC 8664](https://www.rfc-editor.org/info/rfc8664/) | The PCEP peer advertised the SR path capability and the resolved path used MPLS SID 16001. |
+| [RFC 9085](https://www.rfc-editor.org/info/rfc9085/) | Cisco received eight BGP-LS NLRIs. The run checked topology exchange. |
+
+- Confirm locally configured `PCC-COLOR-101` is active and Cisco reports color 101. On PCC, inspect the dynamic path section for `PCE Updt State: Computed`. Compare the separate Cisco `PCInitiate` case with `show router mpls sr-te-lsp auto-lsp all detail`. The original run showed an ordinary `pceInitP2PSrTe` for the PCE-initiated request. The association objects in that request remain unverified. Nokia's guide documents PCC reporting of explicit candidate paths and lists PCE computation, initiation and control of colored candidate paths as unsupported. [Nokia PCEP Guide](https://documentation.nokia.com/sr/26-10/7x50-shared/segment-routing-pce-user/pcep.html)
 - Verify labeled IPv4 routes with `show router bgp routes label-ipv4 detail`. Inspect BGP-LS nodes, links and prefixes on Cisco with `show bgp link-state link-state neighbors 192.0.2.2 routes`.
 - Check PCC FIB for `203.0.113.101/32` via SR Policy and `203.0.113.102/32` via the on-demand SR-TE tunnel. Withdraw and re-advertise the latter with IOS XR BGP `no network 203.0.113.102/32` and `network 203.0.113.102/32` under IPv4 unicast. Check tunnel creation and deletion.
 - For cflowd, assign the host test address and start the collector. In a second shell, obtain the PCC MAC with ARP and run the MPLS packet sender. Allow time for templates and records to flush.
@@ -79,7 +88,7 @@ sudo python3 tools/send-mpls.py pce-lab-collector "$mac"
 python3 tools/decode-netflow.py test-output/netflow.log
 ```
 
-Both formats should show `direction=0` and `[24501, 7, 12345, 0]` for source port 6004. In this test 24501 was the binding SID, 7 was ELI, 12345 was EL and 0 was IPv4 explicit-null. Labels were injected at ingress for the sampling test.
+Both formats should show `direction=0` and `[24501, 7, 12345, 0]` for source port 6004. In this test 24501 was the binding SID, 7 was ELI, 12345 was EL and 0 was IPv4 explicit-null. Labels were injected at ingress. The lab used a 1:1 sample profile to produce repeated records at low traffic rates.
 
 ## Hardware evidence still required
 
