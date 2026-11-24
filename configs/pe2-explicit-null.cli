@@ -1,0 +1,10 @@
+configure terminal
+router isis LAB
+ interface Loopback0
+  address-family ipv4 unicast
+   prefix-sid index 4 explicit-null
+   exit
+  exit
+ exit
+commit
+end

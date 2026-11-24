@@ -1,0 +1,5 @@
+/configure routing-options if-attribute admin-group "PRIMARY" value 0
+/configure router "Base" interface "to-p1" if-attribute admin-group "PRIMARY"
+/configure router "Base" isis 0 flexible-algorithms flex-algo 128 participate true
+/configure router "Base" isis 0 flexible-algorithms admin-state enable
+/configure router "Base" isis 0 interface "system" flex-algo 128 ipv4-node-sid index 103

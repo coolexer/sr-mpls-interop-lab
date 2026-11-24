@@ -1,0 +1,10 @@
+configure terminal
+evpn
+ evi 100
+  load-balancing
+   flow-label static
+   exit
+  exit
+ exit
+commit
+end

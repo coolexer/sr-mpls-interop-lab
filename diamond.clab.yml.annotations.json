@@ -1,0 +1,231 @@
+{
+  "freeTextAnnotations": [
+    {
+      "fontSize": 28,
+      "id": "title",
+      "roundedBackground": true,
+      "width": 630,
+      "height": 48,
+      "fontFamily": "sans-serif",
+      "backgroundColor": "#172d46",
+      "fontColor": "#f2f7ff",
+      "position": {
+        "x": 82,
+        "y": 6
+      },
+      "text": "**SR-MPLS interoperability**"
+    },
+    {
+      "fontSize": 16,
+      "id": "underlay",
+      "roundedBackground": true,
+      "width": 490,
+      "height": 34,
+      "fontFamily": "sans-serif",
+      "backgroundColor": "#233a53",
+      "fontColor": "#d7e9fa",
+      "position": {
+        "x": 82,
+        "y": 67
+      },
+      "text": "IS-IS Level 2  ·  SRGB 16000–23999"
+    },
+    {
+      "fontSize": 14,
+      "id": "left",
+      "roundedBackground": true,
+      "width": 326,
+      "height": 39,
+      "fontFamily": "sans-serif",
+      "backgroundColor": "#233a53",
+      "fontColor": "#e8f4ff",
+      "position": {
+        "x": 82,
+        "y": 433
+      },
+      "text": "VPWS 100  ·  ELAN 200  ·  L3VPN 300"
+    },
+    {
+      "id": "nokia-pe1",
+      "fontSize": 14,
+      "roundedBackground": true,
+      "width": 193,
+      "height": 39,
+      "fontFamily": "sans-serif",
+      "backgroundColor": "#233a53",
+      "fontColor": "#e8f4ff",
+      "position": {
+        "x": 271,
+        "y": 375
+      },
+      "text": "**Nokia 7250 IXR-e3x**"
+    },
+    {
+      "fontSize": 14,
+      "id": "right",
+      "roundedBackground": true,
+      "width": 193,
+      "height": 39,
+      "fontFamily": "sans-serif",
+      "backgroundColor": "#422917",
+      "fontColor": "#ffdfba",
+      "position": {
+        "x": 771,
+        "y": 375
+      },
+      "text": "**Cisco IOS XRd** · 26.2.1"
+    }
+  ],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "scriptButtonAnnotations": [
+    {
+      "id": "test-vpn",
+      "position": {
+        "x": 318,
+        "y": 495
+      },
+      "label": "Run L3VPN probes",
+      "scriptPath": "tools/check-vpn.sh",
+      "output": "terminal",
+      "timeoutSeconds": 30,
+      "color": "#17608d"
+    },
+    {
+      "id": "capture",
+      "position": {
+        "x": 553,
+        "y": 495
+      },
+      "label": "Capture PE links",
+      "scriptPath": "tools/capture-core.sh",
+      "output": "terminal",
+      "timeoutSeconds": 25,
+      "color": "#17608d"
+    }
+  ],
+  "groupStyleAnnotations": [
+    {
+      "id": "isis-core",
+      "name": "Nokia IXR-e3x · IS-IS transit",
+      "level": "L1",
+      "position": {
+        "x": 468,
+        "y": 110
+      },
+      "width": 225,
+      "height": 364,
+      "backgroundColor": "#2d526b",
+      "backgroundOpacity": 15,
+      "borderColor": "#688ca5",
+      "borderWidth": 1,
+      "borderStyle": "dashed",
+      "borderRadius": 16,
+      "labelColor": "#80a9c6",
+      "labelPosition": "top-left",
+      "zIndex": -5
+    }
+  ],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "host1",
+      "position": {
+        "x": 70,
+        "y": 255
+      },
+      "icon": "client",
+      "box": {
+        "color": "#f1f5f9",
+        "borderColor": "#b9c9d8",
+        "cornerRadius": 12,
+        "textColor": "#183654"
+      }
+    },
+    {
+      "id": "pe1",
+      "position": {
+        "x": 310,
+        "y": 255
+      },
+      "icon": "router",
+      "interfacePattern": "1/1/c{n}/1",
+      "box": {
+        "color": "#e6f2fc",
+        "borderColor": "#94bbdb",
+        "cornerRadius": 12,
+        "textColor": "#143858"
+      }
+    },
+    {
+      "id": "p1",
+      "position": {
+        "x": 557,
+        "y": 154
+      },
+      "icon": "router",
+      "interfacePattern": "1/1/c{n}/1",
+      "box": {
+        "color": "#e7f6f5",
+        "borderColor": "#94c5c6",
+        "cornerRadius": 12,
+        "textColor": "#143858"
+      }
+    },
+    {
+      "id": "p2",
+      "position": {
+        "x": 557,
+        "y": 368
+      },
+      "icon": "router",
+      "interfacePattern": "1/1/c{n}/1",
+      "box": {
+        "color": "#f0ebf9",
+        "borderColor": "#b9aad3",
+        "cornerRadius": 12,
+        "textColor": "#143858"
+      }
+    },
+    {
+      "id": "pe2",
+      "position": {
+        "x": 810,
+        "y": 255
+      },
+      "icon": "vm",
+      "iconColor": "#a44c16",
+      "interfacePattern": "Gi0-0-0-{n:0}",
+      "box": {
+        "color": "#ffeddb",
+        "borderColor": "#ca7844",
+        "cornerRadius": 12,
+        "textColor": "#6b3412"
+      }
+    },
+    {
+      "id": "host2",
+      "position": {
+        "x": 1050,
+        "y": 255
+      },
+      "icon": "server",
+      "box": {
+        "color": "#f1f5f9",
+        "borderColor": "#b9c9d8",
+        "cornerRadius": 12,
+        "textColor": "#183654"
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {
+    "nodeStyle": "boxed",
+    "linkStyle": "straight",
+    "linkLabelMode": "on-select",
+    "showRateLabels": false,
+    "autoCreateTrafficRateAnnotations": false,
+    "animateTraffic": false
+  }
+}

@@ -1,0 +1,174 @@
+Selected lab evidence
+Packet timestamps, local link MAC addresses and shell prompts have been removed.
+
+PCC-initiated colored SR policy
+  ixr-color-101-final:
+    Policy Name: PCC-COLOR-101
+    Admin Status    : Up                    Color           : 101
+    Preference      : 100                   BSID            : 24501
+    Operational     : Yes
+    1 MPLS Label  : 16001                 State           : resolved-up
+  xr-color-101-final:
+    Color: 101, Endpoint: 192.0.2.1
+
+PCE-initiated SR-TE observed on the PCC
+  ixr-color-comparison:
+    LSP Type        : pceInitP2PSrTe            LSP Tunnel ID        : 16388
+
+Automated steering and on-demand LSP
+  ixr-bgp-color-before-odn:
+    Community      : color:00:101
+    192.0.2.1 (Transport:SR-Policy:917507)
+  ixr-baseline:
+    Resolving Next-Hop  : 192.0.2.1 (SR-TE tunnel:671754)
+    LSP Type        : OnDemandSrTe              LSP Tunnel ID        : 16393
+  ixr-odn-after-withdraw:
+    No Matching Entries Found.
+    No entries found.
+    No Matching Entries Found
+
+BGP-LS and BGP-LU
+  xr-baseline:
+    Processed 8 prefixes, 8 paths
+  ixr-lu-and-save-final:
+    Network        : 203.0.113.110/32
+    IPv4 Label     : 0
+    Network        : 203.0.113.111/32
+    IPv4 Label     : 3
+    Network        : 203.0.113.112/32
+    Prefix SID     : index 157, originator-srgb [0/0]
+    Network        : 203.0.113.114/32
+    IPv4 Label     : 24002
+
+Ingress MPLS cflowd
+  ipfix-decoded:
+    v10 collector-port=4739, template=2610, src-port=6004, destination=203.0.113.101, direction=0, ingress=3, MPLS labels=[24501, 7, 12345, 0]
+    v9 collector-port=2055, template=2310, src-port=6004, destination=203.0.113.101, direction=0, ingress=3, MPLS labels=[24501, 7, 12345, 0]
+
+L3VPN v4 and v6 with regular PHP
+  overlay-host1:
+    PING 203.0.113.194 (203.0.113.194): 56 data bytes
+    PING 2001:db8:300:2::2 (2001:db8:300:2::2): 56 data bytes
+  php-service:
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 102: MPLS (label 24007, tc 0, [S], ttl 62) 203.0.113.130 > 203.0.113.194: ICMP echo request, id 88, seq 0, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 102: MPLS (label 24007, tc 0, [S], ttl 62) 203.0.113.130 > 203.0.113.194: ICMP echo request, id 88, seq 1, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 102: MPLS (label 24007, tc 0, [S], ttl 62) 203.0.113.130 > 203.0.113.194: ICMP echo request, id 88, seq 2, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 122: MPLS (label 24006, tc 0, [S], ttl 62) 2001:db8:300:1::2 > 2001:db8:300:2::2: ICMP6, echo request, id 94, seq 0, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 122: MPLS (label 24006, tc 0, [S], ttl 62) 2001:db8:300:1::2 > 2001:db8:300:2::2: ICMP6, echo request, id 94, seq 1, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 122: MPLS (label 24006, tc 0, [S], ttl 62) 2001:db8:300:1::2 > 2001:db8:300:2::2: ICMP6, echo request, id 94, seq 2, length 64
+
+L3VPN explicit-null toward Cisco
+  explicit-null-service:
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 106: MPLS (label 0, tc 0, ttl 62) (label 24007, tc 0, [S], ttl 63) 203.0.113.130 > 203.0.113.194: ICMP echo request, id 100, seq 0, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 106: MPLS (label 0, tc 0, ttl 62) (label 24007, tc 0, [S], ttl 63) 203.0.113.130 > 203.0.113.194: ICMP echo request, id 100, seq 1, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 106: MPLS (label 0, tc 0, ttl 62) (label 24007, tc 0, [S], ttl 63) 203.0.113.130 > 203.0.113.194: ICMP echo request, id 100, seq 2, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 126: MPLS (label 0, tc 0, ttl 62) (label 24006, tc 0, [S], ttl 63) 2001:db8:300:1::2 > 2001:db8:300:2::2: ICMP6, echo request, id 106, seq 0, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 126: MPLS (label 0, tc 0, ttl 62) (label 24006, tc 0, [S], ttl 63) 2001:db8:300:1::2 > 2001:db8:300:2::2: ICMP6, echo request, id 106, seq 1, length 64
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 126: MPLS (label 0, tc 0, ttl 62) (label 24006, tc 0, [S], ttl 63) 2001:db8:300:1::2 > 2001:db8:300:2::2: ICMP6, echo request, id 106, seq 2, length 64
+  explicit-null-ping:
+    3 packets transmitted, 3 packets received, 0% packet loss
+
+IXR IPv4 VPN egress with and without explicit-null
+  ixr-egress-input:
+    Injected [1048572] with source port 6091
+    Injected [0, 1048572] with source port 6092
+  ixr-egress-capture:
+    <link-mac> > <link-mac>, ethertype 802.1Q (0x8100), length 60: vlan 300, p 0, ethertype IPv4 (0x0800), 203.0.113.194.6091 > 203.0.113.130.6090: UDP, length 14
+    <link-mac> > <link-mac>, ethertype 802.1Q (0x8100), length 60: vlan 300, p 0, ethertype IPv4 (0x0800), 203.0.113.194.6091 > 203.0.113.130.6090: UDP, length 14
+    <link-mac> > <link-mac>, ethertype 802.1Q (0x8100), length 60: vlan 300, p 0, ethertype IPv4 (0x0800), 203.0.113.194.6091 > 203.0.113.130.6090: UDP, length 14
+    <link-mac> > <link-mac>, ethertype 802.1Q (0x8100), length 60: vlan 300, p 0, ethertype IPv4 (0x0800), 203.0.113.194.6092 > 203.0.113.130.6090: UDP, length 14
+    <link-mac> > <link-mac>, ethertype 802.1Q (0x8100), length 60: vlan 300, p 0, ethertype IPv4 (0x0800), 203.0.113.194.6092 > 203.0.113.130.6090: UDP, length 14
+    <link-mac> > <link-mac>, ethertype 802.1Q (0x8100), length 60: vlan 300, p 0, ethertype IPv4 (0x0800), 203.0.113.194.6092 > 203.0.113.130.6090: UDP, length 14
+    6 packets captured
+
+TI-LFA link protection and programmed node protection
+  ti-lfa-before:
+    Interface           : to-p1
+    Interface           : to-p2
+    Tunnel Flags     : has-lfa
+    8882   8898    8898   0 0  Tn +R  1920.0000.2003 SR_ERR_OK
+    8882   8898    8898   0 0  Tn +R  0000.0000.0004 SR_ERR_OK
+  ti-lfa-after:
+    Interface           : to-p2
+  ti-lfa-stream:
+    99 packets transmitted, 88 received, 11.1111% packet loss, time 9988ms
+
+SRLG exclusion and restoration
+  srlg-before:
+    Number of tunnel-table entries with LFA : 1
+  srlg-shared:
+    Number of tunnel-table entries with LFA : 0
+  srlg-disjoint:
+    Number of tunnel-table entries with LFA : 1
+
+Flex-Algo selects the alternate path
+  flex-algo-verified:
+    NextHop          : 198.51.100.1
+    Tunnel Label     : 16004                Tunnel Metric    : 20
+    NextHop          : 198.51.100.5
+    Algorithm        : 128
+    Tunnel Label     : 16104                Tunnel Metric    : 60
+
+BGP PIC before and after primary withdrawal
+  pic-verified-before:
+    Indirect Next-Hop     : 192.0.2.2
+    Indirect Next-Hop     : 192.0.2.3
+    Backup-Path         : Yes
+    3 packets transmitted, 3 packets received, 0.00% packet loss
+  pic-verified-after:
+    Indirect Next-Hop     : 192.0.2.3
+    3 packets transmitted, 3 packets received, 0.00% packet loss
+
+EVPN VPWS FAT reaches Cisco core ingress
+  vpws-fat-at-xr:
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 64: MPLS (label 24004, tc 0, ttl 254) (label 469362, tc 0, [S], ttl 0)
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 64: MPLS (label 24004, tc 0, ttl 254) (label 469362, tc 0, [S], ttl 0)
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 64: MPLS (label 24004, tc 0, ttl 254) (label 469362, tc 0, [S], ttl 0)
+  vpws-ping:
+    5 packets transmitted, 0 packets received, 100% packet loss
+
+EVPN ELAN MPLS destination
+  pe1-evpn-final:
+    192.0.2.4                       isis:524293       24120      Up    bum    0
+
+PCEP smoke test with the published configurations
+  pcc-smoke:
+    Admin Status          : Up              Oper Status             : Up
+    Sync State            : done            Peer Overloaded         : False
+    Color                 : 101
+    1 MPLS Label          : 16001           State                   : resolved-up
+
+IS-IS Level 1 and adjacency SIDs
+  pcc-l1-check:
+    pce                      L1    Up    28   to-xr                         0
+    1     16001  192.0.2.1   AddTnl    1   0   15   11   10   1   1
+  xr-l1-check:
+    IS-IS LAB (Level-1) Link State Database
+    ADJ-SID: F:0 B:0 V:1 L:1 S:0 P:0 weight:0 Adjacency-sid:24004
+    ADJ-SID: F:0 B:0 V:1 L:1 S:0 P:0 weight:0 Adjacency-sid:1048574
+
+IXR Adjacency-SID forwarding on the services topology
+  PE1 local IS-IS LSP:
+    Nbr       : p2.00
+    Adj-SID: Flags:v4BVL Weight:0 Label:1048574
+  adjsid-injection:
+    Injected three packets with MPLS [1048574, 16003]
+  adjsid-forwarding, one of three matching packets on PE1-to-P2:
+    <link-mac> > <link-mac>, ethertype MPLS unicast (0x8847), length 65: MPLS (label 16003, tc 0, [S], ttl 63) 192.0.2.2.6093 > 192.0.2.3.6090: UDP, length 19
+    3 packets captured
+
+Single-hop IPv4 BFD for IS-IS
+  Test                     State     Tx packets   Rx packets
+  PE1 to P1                Up                17           15
+  P1 to PE1                Up                16           17
+  Baseline IXR to XRd      Down              63            0
+  Baseline XRd IS-IS IPv4 BFD state: Init
+
+P1 node isolation
+  node-failure-before:
+    Tunnel Label     : 16004                Tunnel Metric    : 20
+  node-failure-after:
+    p2                       L2    Up    25   to-p2                         0
+    Tunnel Label     : 16004                Tunnel Metric    : 60
+  node-failure-probes:
+    60 packets transmitted, 60 packets received, 0% packet loss

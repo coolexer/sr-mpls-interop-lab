@@ -1,0 +1,16 @@
+/configure router "Base" interface "PIC-PREFIX" loopback
+/configure router "Base" interface "PIC-PREFIX" ipv4 primary address 203.0.113.241
+/configure router "Base" interface "PIC-PREFIX" ipv4 primary prefix-length 32
+/configure router "Base" interface "PIC-PREFIX" admin-state enable
+/configure policy-options prefix-list "PIC-PREFIX" prefix 203.0.113.241/32 type exact
+/configure policy-options policy-statement "PIC-EXPORT" entry 10 from prefix-list ["PIC-PREFIX"]
+/configure policy-options policy-statement "PIC-EXPORT" entry 10 action action-type accept
+/configure policy-options policy-statement "PIC-EXPORT" entry 10 action advertise-label per-prefix
+/configure policy-options policy-statement "PIC-EXPORT" entry 10 action local-preference 100
+/configure policy-options policy-statement "PIC-EXPORT" default-action action-type reject
+/configure router "Base" bgp router-id 192.0.2.3
+/configure router "Base" bgp group "PIC" peer-as 64512
+/configure router "Base" bgp group "PIC" local-address 192.0.2.3
+/configure router "Base" bgp group "PIC" family label-ipv4 true
+/configure router "Base" bgp group "PIC" export policy ["PIC-EXPORT"]
+/configure router "Base" bgp neighbor 192.0.2.1 group "PIC"

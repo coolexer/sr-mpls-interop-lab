@@ -1,0 +1,142 @@
+configure terminal
+router static
+ address-family ipv4 unicast
+  198.18.0.0/31 198.51.100.1
+  203.0.113.114/32 198.51.100.1
+ exit
+exit
+interface Loopback0
+ ipv4 address 192.0.2.1 255.255.255.255
+exit
+interface Loopback101
+ ipv4 address 203.0.113.101 255.255.255.255
+exit
+interface Loopback102
+ ipv4 address 203.0.113.102 255.255.255.255
+exit
+interface Loopback103
+ ipv4 address 203.0.113.103 255.255.255.255
+exit
+interface Loopback110
+ ipv4 address 203.0.113.110 255.255.255.255
+exit
+interface Loopback111
+ ipv4 address 203.0.113.111 255.255.255.255
+exit
+interface Loopback112
+ ipv4 address 203.0.113.112 255.255.255.255
+exit
+interface GigabitEthernet0/0/0/0
+ ipv4 address 198.51.100.0 255.255.255.254
+ no shutdown
+exit
+extcommunity-set opaque LAB-COLOR-101
+  101
+end-set
+extcommunity-set opaque LAB-COLOR-102
+  102
+end-set
+route-policy LAB-COLORS
+  if destination in (203.0.113.101/32) then
+    set extcommunity color LAB-COLOR-101
+  elseif destination in (203.0.113.102/32) then
+    set extcommunity color LAB-COLOR-102
+  else
+    pass
+  endif
+end-policy
+route-policy LAB-LU-SID
+  set label-index 157
+end-policy
+route-policy LAB-LU-LABELS
+  if destination in (203.0.113.110/32) then
+    set label explicit-null
+  elseif destination in (203.0.113.111/32) then
+    set label implicit-null
+  elseif destination in (203.0.113.112/32, 203.0.113.114/32) then
+    pass
+  else
+    drop
+  endif
+end-policy
+router isis LAB
+ is-type level-2-only
+ net 49.0001.0000.0000.0001.00
+ distribute link-state
+ address-family ipv4 unicast
+  metric-style wide
+  mpls traffic-eng level-2-only
+  mpls traffic-eng router-id Loopback0
+  segment-routing mpls
+ exit
+ flex-algo 128
+  advertise-definition
+ exit
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+   prefix-sid index 1
+   prefix-sid algorithm 128 index 129
+  exit
+ exit
+ interface GigabitEthernet0/0/0/0
+  point-to-point
+  address-family ipv4 unicast
+  exit
+ exit
+exit
+router bgp 64512
+ bgp router-id 192.0.2.1
+ address-family ipv4 unicast
+  network 203.0.113.101/32
+  network 203.0.113.102/32
+  network 203.0.113.103/32
+  network 203.0.113.110/32
+  network 203.0.113.111/32
+  network 203.0.113.112/32 route-policy LAB-LU-SID
+  network 203.0.113.114/32
+  allocate-label route-policy LAB-LU-LABELS
+ exit
+ address-family link-state link-state
+ exit
+ neighbor 192.0.2.2
+  remote-as 64512
+  update-source Loopback0
+  address-family ipv4 unicast
+   route-policy LAB-COLORS out
+  exit
+  address-family ipv4 labeled-unicast
+   next-hop-self
+  exit
+  address-family link-state link-state
+  exit
+ exit
+exit
+segment-routing
+ global-block 16000 23999
+ traffic-eng
+ exit
+exit
+pce
+ address ipv4 192.0.2.1
+ segment-routing
+  traffic-eng
+   segment-list name LAB-DIRECT
+    index 1 mpls label 16001
+   exit
+   peer ipv4 192.0.2.2
+    policy LAB-PCE-COLOR-100
+     color 100 end-point ipv4 192.0.2.1
+     candidate-paths
+      preference 100
+       explicit segment-list LAB-DIRECT
+       exit
+      exit
+     exit
+    exit
+   exit
+  exit
+ exit
+exit
+commit
+end

@@ -1,0 +1,4 @@
+/configure router "Base" isis 0 loopfree-alternate ti-lfa max-sr-frr-labels 3
+/configure router "Base" isis 0 loopfree-alternate ti-lfa node-protect
+/configure router "Base" isis 0 loopfree-alternate augment-route-table true
+/configure router "Base" bgp backup-path label-ipv4 true

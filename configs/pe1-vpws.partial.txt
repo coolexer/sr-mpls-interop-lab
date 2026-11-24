@@ -1,0 +1,24 @@
+/configure router "Base" bgp router-id 192.0.2.1
+/configure router "Base" bgp group "PE" peer-as 64512
+/configure router "Base" bgp group "PE" local-address 192.0.2.1
+/configure router "Base" bgp group "PE" family evpn true
+/configure router "Base" bgp group "PE" family vpn-ipv4 true
+/configure router "Base" bgp group "PE" family vpn-ipv6 true
+/configure router "Base" bgp neighbor 192.0.2.4 group "PE"
+/configure router "Base" mpls-labels reserved-label-block "EVPN" start-label 32768
+/configure router "Base" mpls-labels reserved-label-block "EVPN" end-label 49151
+/configure service system reserved-label-block label-block "EVPN" user evpn
+/configure service epipe "VPWS" service-id 100
+/configure service epipe "VPWS" customer "1"
+/configure service epipe "VPWS" bgp 1 route-distinguisher "192.0.2.1:100"
+/configure service epipe "VPWS" bgp 1 route-target import "target:64512:100"
+/configure service epipe "VPWS" bgp 1 route-target export "target:64512:100"
+/configure service epipe "VPWS" sap 1/1/c3/1:100
+/configure service epipe "VPWS" bgp-evpn evi 100
+/configure service epipe "VPWS" bgp-evpn local-attachment-circuit "LOCAL" eth-tag 1
+/configure service epipe "VPWS" bgp-evpn remote-attachment-circuit "REMOTE" eth-tag 2
+/configure service epipe "VPWS" bgp-evpn mpls 1 auto-bind-tunnel resolution filter
+/configure service epipe "VPWS" bgp-evpn mpls 1 auto-bind-tunnel resolution-filter sr-isis true
+/configure service epipe "VPWS" bgp-evpn mpls 1 control-word false
+/configure service epipe "VPWS" bgp-evpn mpls 1 admin-state enable
+/configure service epipe "VPWS" admin-state enable

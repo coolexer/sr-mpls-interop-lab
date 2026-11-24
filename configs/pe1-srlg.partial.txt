@@ -1,0 +1,5 @@
+/configure routing-options if-attribute srlg-group "SHARED" value 7
+/configure routing-options route-next-hop-policy template "SRLG-DISJOINT" srlg true
+/configure router "Base" interface "to-p1" if-attribute srlg-group "SHARED"
+/configure router "Base" interface "to-p2" if-attribute srlg-group "SHARED"
+/configure router "Base" isis 0 interface "to-p1" loopfree-alternate policy-map route-nh-template "SRLG-DISJOINT"

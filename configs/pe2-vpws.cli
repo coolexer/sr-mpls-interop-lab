@@ -1,0 +1,44 @@
+configure terminal
+interface GigabitEthernet0/0/0/2.100 l2transport
+ encapsulation dot1q 100
+ rewrite ingress tag pop 1 symmetric
+ no shutdown
+ exit
+router bgp 64512
+ bgp router-id 192.0.2.4
+ address-family l2vpn evpn
+ exit
+ address-family vpnv4 unicast
+ exit
+ address-family vpnv6 unicast
+ exit
+ neighbor 192.0.2.1
+  remote-as 64512
+  update-source Loopback0
+  address-family l2vpn evpn
+  exit
+  address-family vpnv4 unicast
+  exit
+  address-family vpnv6 unicast
+  exit
+ exit
+exit
+evpn
+ evi 100
+  control-word-disable
+  bgp
+   route-target import 64512:100
+   route-target export 64512:100
+   exit
+  exit
+ exit
+l2vpn
+ xconnect group LAB
+  p2p VPWS
+   interface GigabitEthernet0/0/0/2.100
+   neighbor evpn evi 100 target 1 source 2
+   exit
+  exit
+ exit
+commit
+end

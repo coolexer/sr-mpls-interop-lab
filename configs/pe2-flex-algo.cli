@@ -1,0 +1,16 @@
+configure terminal
+router isis LAB
+ affinity-map PRIMARY bit-position 0
+ flex-algo 128
+  exit
+ interface GigabitEthernet0/0/0/0
+  affinity flex-algo PRIMARY
+  exit
+ interface Loopback0
+  address-family ipv4 unicast
+   prefix-sid algorithm 128 index 104
+   exit
+  exit
+ exit
+commit
+end

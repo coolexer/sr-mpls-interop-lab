@@ -1,0 +1,17 @@
+---
+title: sr-interop
+---
+graph LR
+  pe1["pe1 · Nokia IXR-e3x"]
+  p1["p1 · Nokia IXR-e3x"]
+  p2["p2 · Nokia IXR-e3x"]
+  pe2["pe2 · Cisco IOS XRd"]
+  pe1---p1
+  p1---pe2
+  pe1---p2
+  p2---pe2
+  p1---p2
+  pe1---host1
+  pe2---host2
+  classDef cisco fill:#ffeddb,stroke:#ca7844,color:#6b3412
+  class pe2 cisco

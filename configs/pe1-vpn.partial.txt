@@ -1,0 +1,28 @@
+/configure router "Base" mpls-labels reserved-label-block "EVPN-BUM" start-label 49152
+/configure router "Base" mpls-labels reserved-label-block "EVPN-BUM" end-label 65535
+/configure service system reserved-label-block label-block "EVPN-BUM" user evpn-mcast
+/configure service vpls "ELAN" service-id 200
+/configure service vpls "ELAN" customer "1"
+/configure service vpls "ELAN" bgp 1 route-distinguisher "192.0.2.1:200"
+/configure service vpls "ELAN" bgp 1 route-target import "target:64512:200"
+/configure service vpls "ELAN" bgp 1 route-target export "target:64512:200"
+/configure service vpls "ELAN" sap 1/1/c3/1:200
+/configure service vpls "ELAN" bgp-evpn evi 200
+/configure service vpls "ELAN" bgp-evpn mpls 1 auto-bind-tunnel resolution filter
+/configure service vpls "ELAN" bgp-evpn mpls 1 auto-bind-tunnel resolution-filter sr-isis true
+/configure service vpls "ELAN" bgp-evpn mpls 1 control-word false
+/configure service vpls "ELAN" bgp-evpn mpls 1 admin-state enable
+/configure service vpls "ELAN" admin-state enable
+/configure service vprn "VPN" service-id 300
+/configure service vprn "VPN" customer "1"
+/configure service vprn "VPN" bgp-ipvpn mpls route-distinguisher "192.0.2.1:300"
+/configure service vprn "VPN" bgp-ipvpn mpls vrf-target community "target:64512:300"
+/configure service vprn "VPN" bgp-ipvpn mpls auto-bind-tunnel resolution filter
+/configure service vprn "VPN" bgp-ipvpn mpls auto-bind-tunnel resolution-filter sr-isis true
+/configure service vprn "VPN" bgp-ipvpn mpls admin-state enable
+/configure service vprn "VPN" interface "HOST" ipv4 primary address 203.0.113.129
+/configure service vprn "VPN" interface "HOST" ipv4 primary prefix-length 26
+/configure service vprn "VPN" interface "HOST" ipv6 address 2001:db8:300:1::1 prefix-length 64
+/configure service vprn "VPN" interface "HOST" sap 1/1/c3/1:300
+/configure service vprn "VPN" interface "HOST" admin-state enable
+/configure service vprn "VPN" admin-state enable

@@ -1,0 +1,52 @@
+{
+  "freeTextAnnotations": [
+    {
+      "id": "nokia-pcc",
+      "position": {"x": 367, "y": 350},
+      "width": 218,
+      "height": 39,
+      "fontSize": 14,
+      "fontFamily": "sans-serif",
+      "roundedBackground": true,
+      "backgroundColor": "#233a53",
+      "fontColor": "#e8f4ff",
+      "text": "**Nokia 7250 IXR-e3x** · PCC"
+    },
+    {
+      "id": "cisco-xrd",
+      "position": {"x": 660, "y": 350},
+      "width": 193,
+      "height": 39,
+      "fontSize": 14,
+      "fontFamily": "sans-serif",
+      "roundedBackground": true,
+      "backgroundColor": "#422917",
+      "fontColor": "#ffdfba",
+      "text": "**Cisco IOS XRd** · PCE"
+    }
+  ],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "scriptButtonAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {"id": "pcc", "icon": "router", "interfacePattern": "1/1/c{n}/1", "position": {"x": 420, "y": 240}},
+    {
+      "id": "pce",
+      "icon": "vm",
+      "iconColor": "#a44c16",
+      "interfacePattern": "Gi0-0-0-{n:0}",
+      "position": {"x": 700, "y": 240},
+      "box": {
+        "color": "#ffeddb",
+        "borderColor": "#ca7844",
+        "cornerRadius": 12,
+        "textColor": "#6b3412"
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {"nodeStyle": "boxed"}
+}

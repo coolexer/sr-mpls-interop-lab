@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SR-MPLS interoperability lab</title>
+  <link rel="stylesheet" href="https://srl-labs.github.io/containerlab-app/docs/assets/viewer/component.css">
+  <script type="module" src="https://srl-labs.github.io/containerlab-app/docs/assets/viewer/component.mjs"></script>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f4f7fb; color: #142844; }
+    body { margin: 0; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 24px 48px; }
+    h1 { margin: 0 0 12px; font-size: clamp(1.75rem, 5vw, 2.7rem); line-height: 1.15; }
+    p { color: #465d78; line-height: 1.55; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 22px; margin: 22px 0; }
+    a { color: #194e79; text-underline-offset: 3px; }
+    a[aria-current] { color: #142844; font-weight: 700; }
+    img { max-width: 100%; height: auto; }
+    clab-topology { --clab-surface: #ffffff; --clab-accent: #17608d; --clab-border: #dce5f0;
+      --clab-text: #142844; --clab-font: system-ui, sans-serif; --clab-height: clamp(360px, 65vh, 660px); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>SR-MPLS interoperability lab</h1>
+    <p>Nokia 7250 IXR-e3x (SR-SIM 26.10.R1) and Cisco IOS XRd 26.2.1, with repeatable Containerlab test scenarios.</p>
+    <nav aria-label="Lab views">
+      <a id="diamond" href="./">Services and protection</a>
+      <a id="baseline" href="?lab=baseline">PCEP and telemetry</a>
+      <a href="https://github.com/coolexer/sr-mpls-interop-lab/blob/main/docs/tests.md">Test procedures and results</a>
+      <a href="https://github.com/coolexer/sr-mpls-interop-lab">GitHub repository</a>
+    </nav>
+    <section id="diagram" aria-label="Topology">
+      <img src="./docs/topology.svg" alt="Two provider edges connected through an IS-IS diamond, with a Linux test host at each edge">
+    </section>
+    <p>Zoom into the topology, select a node for details, or switch to YAML to inspect the lab definition.</p>
+  </main>
+  <script type="module" src="./docs/viewer.js"></script>
+</body>
+</html>

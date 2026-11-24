@@ -1,0 +1,26 @@
+name: pce-interop
+
+mgmt:
+  network: pce-interop-mgmt
+  ipv4-subnet: 172.30.42.0/24
+
+topology:
+  nodes:
+    pcc:
+      kind: nokia_srsim
+      type: ixr-e3x
+      image: ${SRSIM_IMAGE}
+      license: ${SRSIM_LICENSE}
+      mgmt-ipv4: 172.30.42.11
+      startup-config: configs/pcc.partial.txt
+    pce:
+      kind: cisco_xrd
+      image: ${XRD_IMAGE}
+      mgmt-ipv4: 172.30.42.12
+  links:
+    - endpoints: ["pce:Gi0-0-0-0", "pcc:1/1/c1/1"]
+    - type: host
+      endpoint:
+        node: pcc
+        interface: 1/1/c2/1
+      host-interface: pce-lab-collector

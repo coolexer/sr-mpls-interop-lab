@@ -1,0 +1,62 @@
+configure terminal
+interface GigabitEthernet0/0/0/2.200 l2transport
+ encapsulation dot1q 200
+ rewrite ingress tag pop 1 symmetric
+ no shutdown
+ exit
+evpn
+ evi 200
+  control-word-disable
+  bgp
+   route-target import 64512:200
+   route-target export 64512:200
+   exit
+  exit
+ exit
+l2vpn
+ bridge group LAB
+  bridge-domain ELAN
+   interface GigabitEthernet0/0/0/2.200
+    exit
+   evi 200
+   exit
+  exit
+ exit
+vrf LAB
+ address-family ipv4 unicast
+  import route-target
+   64512:300
+   exit
+  export route-target
+   64512:300
+   exit
+  exit
+ address-family ipv6 unicast
+  import route-target
+   64512:300
+   exit
+  export route-target
+   64512:300
+   exit
+  exit
+ exit
+interface GigabitEthernet0/0/0/2.300
+ vrf LAB
+ encapsulation dot1q 300
+ ipv4 address 203.0.113.193 255.255.255.192
+ ipv6 address 2001:db8:300:2::1/64
+ no shutdown
+ exit
+router bgp 64512
+ vrf LAB
+  rd 192.0.2.4:300
+  address-family ipv4 unicast
+   redistribute connected
+   exit
+  address-family ipv6 unicast
+   redistribute connected
+   exit
+  exit
+ exit
+commit
+end

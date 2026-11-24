@@ -1,0 +1,10 @@
+clab-*/
+test-output/
+*.lic
+*.pcap
+*.pcapng
+*.log
+*.env
+*.pem
+*.key
+deploy.log

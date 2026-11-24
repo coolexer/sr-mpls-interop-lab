@@ -1,0 +1,10 @@
+/configure router "Base" bgp group "PIC" peer-as 64512
+/configure router "Base" bgp group "PIC" local-address 192.0.2.1
+/configure router "Base" bgp group "PIC" family label-ipv4 true
+/configure router "Base" bgp next-hop-resolution labeled-routes transport-tunnel family label-ipv4 resolution filter
+/configure router "Base" bgp next-hop-resolution labeled-routes transport-tunnel family label-ipv4 resolution-filter sr-isis true
+/configure policy-options policy-statement "PIC-IMPORT" default-action action-type accept
+/configure policy-options policy-statement "PIC-IMPORT" default-action advertise-label per-prefix
+/configure router "Base" bgp group "PIC" import policy ["PIC-IMPORT"]
+/configure router "Base" bgp neighbor 192.0.2.2 group "PIC"
+/configure router "Base" bgp neighbor 192.0.2.3 group "PIC"

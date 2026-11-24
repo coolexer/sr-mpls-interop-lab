@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 500" role="img" aria-labelledby="title desc">
+  <title id="title">SR-MPLS interoperability lab</title>
+  <desc id="desc">A Nokia provider edge and a Cisco IOS XRd provider edge connect through two parallel IS-IS transit routers with a crosslink. A Linux traffic endpoint attaches to each edge. The Cisco edge has an orange virtual-machine icon.</desc>
+  <rect width="1120" height="500" rx="22" fill="#f4f7fb"/>
+  <rect x="24" y="24" width="1072" height="452" rx="18" fill="#fff" stroke="#dce5f0"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="64" y="76" fill="#142844" font-size="27" font-weight="700">SR-MPLS interoperability lab</text>
+    <text x="64" y="106" fill="#495f7a" font-size="15">Nokia SR OS and Cisco IOS XRd · IS-IS Level 2 · SRGB 16000–23999</text>
+    <g fill="none" stroke-width="3" stroke-linecap="round">
+      <path d="M181 271H254 M866 271H939" stroke="#8a9cb0"/>
+      <path d="M365 269 505 172 M615 172 755 269" stroke="#1a678f"/>
+      <path d="M365 276 505 369 M615 369 755 276" stroke="#6852a3"/>
+      <path d="M560 198V344" stroke="#91a1b7" stroke-dasharray="6 7"/>
+    </g>
+    <g font-size="12" fill="#52647c" text-anchor="middle">
+      <text x="434" y="202">198.51.100.0/31</text><text x="688" y="202">198.51.100.2/31</text>
+      <text x="434" y="348">198.51.100.4/31</text><text x="688" y="348">198.51.100.6/31</text>
+      <text x="625" y="274">198.51.100.8/31</text>
+    </g>
+    <g stroke-width="1.4">
+      <rect x="254" y="235" width="112" height="72" rx="12" fill="#eff6fc" stroke="#9abbd8"/>
+      <rect x="747" y="235" width="126" height="72" rx="12" fill="#ffeddb" stroke="#ca7844"/>
+      <g fill="#edf7f7" stroke="#9ac4c6"><rect x="504" y="126" width="112" height="72" rx="12"/></g>
+      <g fill="#f3effa" stroke="#bcacd8"><rect x="504" y="344" width="112" height="72" rx="12"/></g>
+      <g fill="#f6f8fb" stroke="#c5d0dd"><rect x="70" y="235" width="112" height="72" rx="12"/><rect x="938" y="235" width="112" height="72" rx="12"/></g>
+    </g>
+    <g text-anchor="middle" fill="#152a46" font-size="17" font-weight="700">
+      <text x="126" y="266">host1</text><text x="310" y="266">pe1</text><text x="560" y="157">p1</text>
+      <text x="560" y="375">p2</text><text x="822" y="266" fill="#6b3412">pe2</text><text x="994" y="266">host2</text>
+    </g>
+    <g text-anchor="middle" fill="#435d79" font-size="12">
+      <text x="126" y="286">Linux traffic</text>
+      <text x="310" y="284">Nokia IXR-e3x</text><text x="310" y="299" font-size="10">SID 16001</text>
+      <text x="560" y="175">Nokia IXR-e3x</text><text x="560" y="190" font-size="10">SID 16002</text>
+      <text x="560" y="393">Nokia IXR-e3x</text><text x="560" y="408" font-size="10">SID 16003</text>
+      <text x="810" y="286" fill="#6b3412">Cisco XRd · SID 16004</text><text x="994" y="286">Linux traffic</text>
+    </g>
+    <g fill="#ffeddb" stroke="#a44c16" stroke-width="1.5" aria-hidden="true">
+      <rect x="783" y="249" width="17" height="12" rx="2"/>
+      <rect x="779" y="253" width="17" height="12" rx="2"/>
+      <path d="m785 257 2 2-2 2m4 0h3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g font-size="13" fill="#435d79">
+      <path d="M70 441h30" stroke="#1a678f" stroke-width="3"/><text x="109" y="446">Preferred path</text>
+      <path d="M254 441h30" stroke="#6852a3" stroke-width="3"/><text x="293" y="446">Alternate path</text>
+      <path d="M448 441h30" stroke="#91a1b7" stroke-width="3" stroke-dasharray="6 5"/><text x="487" y="446">Core crosslink</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,1 @@
+/configure service epipe "VPWS" bgp-evpn mpls 1 hash-label true

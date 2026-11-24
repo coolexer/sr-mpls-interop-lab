@@ -1,0 +1,313 @@
+configure {
+    cflowd {
+        admin-state enable
+        template-retransmit 10
+        inactive-flow-timeout 10
+        sample-profile 1 {
+            sample-rate 1
+        }
+        collector 198.18.0.0 port 2055 {
+            admin-state enable
+            router-instance "Base"
+            template-set mpls-ip
+            version 9
+            export-filter {
+                interface-list {
+                    router "Base" interface-name "LAB-IPFIX" {
+                        direction ingress
+                    }
+                }
+            }
+        }
+        collector 198.18.0.0 port 4739 {
+            admin-state enable
+            router-instance "Base"
+            template-set mpls-ip
+            version 10
+            export-filter {
+                interface-list {
+                    router "Base" interface-name "LAB-IPFIX" {
+                        direction ingress
+                    }
+                }
+            }
+        }
+    }
+    policy-options {
+        community "LAB-ODN-COLOR-102" {
+            member "color:00:102" { }
+        }
+        policy-statement "LAB-ODN" {
+            entry 10 {
+                from {
+                    community {
+                        name "LAB-ODN-COLOR-102"
+                    }
+                }
+                action {
+                    action-type accept
+                    admin-tag-policy "LAB-ODN-TAG-POLICY"
+                    create-mpls-tunnel true
+                }
+            }
+            default-action {
+                action-type accept
+            }
+        }
+    }
+    port 1/1/c1 {
+        admin-state enable
+        connector {
+            breakout c1-100g
+        }
+    }
+    port 1/1/c1/1 {
+        admin-state enable
+        ethernet {
+            mode network
+        }
+    }
+    port 1/1/c2 {
+        admin-state enable
+        connector {
+            breakout c1-100g
+        }
+    }
+    port 1/1/c2/1 {
+        admin-state enable
+        ethernet {
+            mode network
+        }
+    }
+    router "Base" {
+        autonomous-system 64512
+        interface "LAB-IPFIX" {
+            admin-state enable
+            port 1/1/c2/1
+            cflowd-parameters {
+                sampling both {
+                    sample-profile 1
+                }
+            }
+            ipv4 {
+                primary {
+                    address 198.18.0.1
+                    prefix-length 31
+                }
+            }
+        }
+        interface "system" {
+            ipv4 {
+                primary {
+                    address 192.0.2.2
+                    prefix-length 32
+                }
+            }
+        }
+        interface "to-xr" {
+            admin-state enable
+            port 1/1/c1/1
+            cflowd-parameters {
+                sampling both {
+                    sample-profile 1
+                }
+            }
+            ipv4 {
+                primary {
+                    address 198.51.100.1
+                    prefix-length 31
+                }
+            }
+        }
+        mpls-labels {
+            static-label-range 15968
+            sr-labels {
+                start 16000
+                end 23999
+            }
+            reserved-label-block "LAB-COLOR" {
+                start-label 24500
+                end-label 24509
+            }
+        }
+        bgp {
+            router-id 192.0.2.2
+            link-state-route-export true
+            link-state-route-import true
+            next-hop-resolution {
+                shortcut-tunnel {
+                    family ipv4 {
+                        resolution filter
+                        resolution-filter {
+                            sr-te true
+                            sr-policy true
+                        }
+                    }
+                }
+            }
+            group "LAB-XR" {
+                peer-as 64512
+                local-address 192.0.2.2
+                family {
+                    ipv4 true
+                    label-ipv4 true
+                    bgp-ls true
+                }
+                import {
+                    policy ["LAB-ODN"]
+                }
+            }
+            neighbor "192.0.2.1" {
+                group "LAB-XR"
+            }
+        }
+        isis 0 {
+            admin-state enable
+            advertise-router-capability area
+            level-capability 2
+            traffic-engineering true
+            area-address [49.0001]
+            database-export {
+                igp-identifier 1
+                bgp-ls-identifier {
+                    value 1
+                }
+            }
+            flexible-algorithms {
+                admin-state enable
+                flex-algo 128 {
+                    participate true
+                    advertise "LAB-FAD128"
+                }
+            }
+            segment-routing {
+                admin-state enable
+                prefix-sid-range {
+                    start-label 16000
+                    max-index 7999
+                }
+            }
+            interface "system" {
+                passive true
+                ipv4-node-sid {
+                    index 2
+                }
+                flex-algo 128 {
+                    ipv4-node-sid {
+                        index 130
+                    }
+                }
+            }
+            interface "to-xr" {
+                interface-type point-to-point
+            }
+        }
+        mpls {
+            admin-state enable
+            interface "to-xr" {
+                admin-state enable
+            }
+            path "LAB-ODN-DEFAULT" {
+                admin-state enable
+            }
+            path "empty" {
+                admin-state enable
+            }
+            lsp-template "LAB-ODN-XR" {
+                admin-state enable
+                type p2p-sr-te-on-demand
+                default-path "LAB-ODN-DEFAULT"
+                path-computation-method pce
+                pce-control true
+                admin-tag "LAB-ODN-TAG" { }
+            }
+            lsp-template "pce-init-sr" {
+                admin-state enable
+                type p2p-sr-te-pce-init
+                default-path "empty"
+                template-id default
+            }
+            lsp "PCC-TO-XR" {
+                admin-state enable
+                type p2p-sr-te
+                to 192.0.2.1
+                pce-control true
+                pce-report true
+                path-computation-method pce
+                primary "empty" {
+                }
+            }
+            auto-lsp "LAB-ODN-XR" {
+            }
+            pce-init-lsp {
+                sr-te {
+                    admin-state enable
+                }
+            }
+        }
+        pcep {
+            pcc {
+                admin-state enable
+                local-address 192.0.2.2
+                capability-advertisement {
+                    sr-policy true
+                }
+                peer 192.0.2.1 {
+                    admin-state enable
+                    route-preference inband
+                }
+            }
+        }
+        rsvp {
+            admin-state disable
+            interface "system" {
+                admin-state disable
+            }
+            interface "to-xr" {
+                admin-state disable
+            }
+        }
+        segment-routing {
+            sr-policies {
+                admin-state enable
+                reserved-label-block "LAB-COLOR"
+                static-policy "PCC-COLOR-101" {
+                    admin-state enable
+                    color 101
+                    endpoint 192.0.2.1
+                    preference 100
+                    head-end local
+                    binding-sid 24501
+                    distinguisher 101
+                    dynamic {
+                        path-computation-method pce
+                        optimization-objective {
+                            metric-type igp
+                        }
+                    }
+                }
+            }
+        }
+        static-routes {
+            route 203.0.113.114/32 route-type unicast {
+                next-hop "198.18.0.0" {
+                    admin-state enable
+                }
+            }
+        }
+    }
+    routing-options {
+        flexible-algorithm-definitions {
+            flex-algo "LAB-FAD128" {
+                admin-state enable
+                metric-type igp
+            }
+        }
+        admin-tags {
+            admin-tag "LAB-ODN-TAG" { }
+            route-admin-tag-policy "LAB-ODN-TAG-POLICY" {
+                include "LAB-ODN-TAG" { }
+            }
+        }
+    }
+}

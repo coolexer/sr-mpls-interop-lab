@@ -1,0 +1,45 @@
+name: sr-interop
+
+mgmt:
+  network: sr-interop-mgmt
+  ipv4-subnet: 172.30.41.0/24
+
+topology:
+  kinds:
+    nokia_srsim:
+      type: ixr-e3x
+      image: ${SRSIM_IMAGE}
+      license: ${SRSIM_LICENSE}
+    cisco_xrd:
+      image: ${XRD_IMAGE}
+    linux:
+      image: alpine:3.23
+      cmd: sleep infinity
+  nodes:
+    pe1:
+      kind: nokia_srsim
+      mgmt-ipv4: 172.30.41.11
+      startup-config: configs/pe1.partial.txt
+    p1:
+      kind: nokia_srsim
+      mgmt-ipv4: 172.30.41.12
+      startup-config: configs/p1.partial.txt
+    p2:
+      kind: nokia_srsim
+      mgmt-ipv4: 172.30.41.13
+      startup-config: configs/p2.partial.txt
+    pe2:
+      kind: cisco_xrd
+      mgmt-ipv4: 172.30.41.14
+    host1:
+      kind: linux
+    host2:
+      kind: linux
+  links:
+    - endpoints: ["pe1:1/1/c1/1", "p1:1/1/c1/1"]
+    - endpoints: ["p1:1/1/c2/1", "pe2:Gi0-0-0-0"]
+    - endpoints: ["pe1:1/1/c2/1", "p2:1/1/c1/1"]
+    - endpoints: ["p2:1/1/c2/1", "pe2:Gi0-0-0-1"]
+    - endpoints: ["p1:1/1/c3/1", "p2:1/1/c3/1"]
+    - endpoints: ["pe1:1/1/c3/1", "host1:eth1"]
+    - endpoints: ["pe2:Gi0-0-0-2", "host2:eth1"]
